@@ -1,5 +1,10 @@
+#ifndef _CONV_
+#define _CONV_
+
 #include "tensor.h"
-class Convolution
+#include "layer.h"
+
+class Convolution: public ILayer<3,3>
 {
 private:
 	Tensor<4> _weight;
@@ -21,10 +26,11 @@ public:
 	}
 
 	//Currently, All tensor assume CHW format
+	
 	void forward(Tensor<3> &src_tensor, Tensor<3> &dst_tensor)
 	{
-		int in_hw = src_tensor.get_shape()[0];
-		int out_hw = (in_hw + 2 * _padding - _ks) / _stride + 1;
+		int in_hw = src_tensor.get_shape().shape_arr[0];
+		//int out_hw = (in_hw + 2 * _padding - _ks) / _stride + 1;
 
 		//Naive 7-loop implmentation
 		for (int m = 0; m < _M; ++m)
@@ -49,4 +55,12 @@ public:
 			}
 		}
 	}
+
+	Shape<3> infer_output_shape(Tensor<3> &src_tensor){
+		int in_hw = src_tensor.get_shape().shape_arr[0];
+		int out_hw = (in_hw + 2 * _padding - _ks) / _stride + 1;
+		return Shape<3>(_M,out_hw,out_hw); //CHW Format
+	}
 };
+
+#endif
