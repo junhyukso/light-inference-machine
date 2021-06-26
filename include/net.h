@@ -3,6 +3,7 @@
 
 class net
 {
+    
 };
 
 #endif
