@@ -26,7 +26,7 @@ private:
 	}
 
 public:
-	Tensor(std::initializer_list<int> li) : _shape(Shape(li))
+	Tensor(std::initializer_list<int> li) : _shape(li)
 	{
 		init_data_members();
 	}

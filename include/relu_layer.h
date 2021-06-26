@@ -9,8 +9,8 @@
 class ReLU : public Layer
 {
 private:
-    int _lower_bound;
-    int _upper_bound;
+    float _lower_bound;
+    float _upper_bound;
 
 public:
 	ReLU(float lower_bound=0.0f,float upper_bound=std::numeric_limits<float>::max())
