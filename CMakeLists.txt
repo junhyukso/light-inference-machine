@@ -6,6 +6,8 @@ PROJECT ( light-inference-machine )
 SET( PROJECT_VERSION_MAJOR 0 )
 SET( PROJECT_VERSION_MINOR 0.2 )
 
+set (CMAKE_CXX_STANDARD 11)
+
 SET ( CMAKE_BUILD_TYPE <Debug|Release> )
 SET ( CMAKE_VERBOSE_MAKEFILE <true|false> )
 

@@ -5,25 +5,35 @@
 #include <initializer_list>
 #include "shape.h"
 
-template <int DIM>
 class Tensor
 {
 private:
-	Shape<DIM> _shape;
+	Shape _shape;
 	float *_data_arr;
 	int _length;
 
-public:
-	template <typename... T>
-	Tensor(T... shape) : _shape(shape...)
-	{ // note the use of brace-init-list
+	//init _data_arr, _length.
+	//MUST be called after _shape created.
+	void init_data_members()
+	{
 		int length = 1;
-		for (int i = 0; i < DIM; ++i)
+		for (int i = 0; i < _shape.dim; ++i)
 		{
 			length *= _shape.shape_arr[i];
 		}
 		_length = length;
 		_data_arr = new float[length];
+	}
+
+public:
+	Tensor(std::initializer_list<int> li) : _shape(Shape(li))
+	{
+		init_data_members();
+	}
+
+	Tensor(const Shape& shape) : _shape(shape)
+	{
+		init_data_members();
 	}
 
 	~Tensor()
@@ -36,7 +46,7 @@ public:
 		return _shape.dim;
 	}
 
-	Shape<DIM> get_shape()
+	Shape get_shape()
 	{
 		return _shape;
 	}
@@ -54,7 +64,7 @@ public:
 	void print()
 	{
 		std::cout << "Shape : \n";
-		for (int i = 0; i < DIM; ++i)
+		for (int i = 0; i < _shape.dim; ++i)
 			std::cout << _shape.shape_arr[i] << ' ';
 		std::cout << "\n Data : \n";
 		for (int i = 0; i < _length; i++)

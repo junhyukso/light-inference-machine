@@ -4,10 +4,10 @@
 #include "tensor.h"
 #include "layer.h"
 
-class Convolution: public ILayer<3,3>
+class Convolution : public Layer
 {
 private:
-	Tensor<4> _weight;
+	Tensor _weight;
 	int _padding;
 	int _stride;
 	int _ks;
@@ -16,7 +16,7 @@ private:
 
 public:
 	Convolution(int in_channel, int out_channel, int kernel_size, int padding = 1, int stride = 1)
-		: _weight(out_channel, in_channel, kernel_size, kernel_size) //Weight format = MCHW
+		: _weight({out_channel, in_channel, kernel_size, kernel_size}) //Weight format = MCHW
 	{
 		_padding = padding;
 		_stride = stride;
@@ -26,8 +26,8 @@ public:
 	}
 
 	//Currently, All tensor assume CHW format
-	
-	void forward(Tensor<3> &src_tensor, Tensor<3> &dst_tensor)
+
+	void forward(Tensor &src_tensor, Tensor &dst_tensor)
 	{
 		int in_hw = src_tensor.get_shape().shape_arr[0];
 		//int out_hw = (in_hw + 2 * _padding - _ks) / _stride + 1;
@@ -56,10 +56,11 @@ public:
 		}
 	}
 
-	Shape<3> infer_output_shape(Tensor<3> &src_tensor){
-		int in_hw = src_tensor.get_shape().shape_arr[0];
+	Shape infer_output_shape(const Shape &src_shape)
+	{
+		int in_hw = src_shape.shape_arr[1];
 		int out_hw = (in_hw + 2 * _padding - _ks) / _stride + 1;
-		return Shape<3>(_M,out_hw,out_hw); //CHW Format
+		return Shape({_M, out_hw, out_hw}); //CHW Format
 	}
 };
 

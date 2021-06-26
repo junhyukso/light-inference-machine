@@ -1,12 +1,17 @@
 #ifndef _SHAPE_
 #define _SHAPE_
 
-template <int DIM>
-struct Shape {
-    int shape_arr[DIM];
-    int dim = DIM;
-    template <typename... T>
-    Shape(T... shape) : shape_arr{shape...}{}
+#include <vector>
+#include <initializer_list>
+
+struct Shape
+{
+    std::vector<int> shape_arr;
+    int dim;
+    Shape(std::initializer_list<int> li) : shape_arr(li)
+    {
+        dim = shape_arr.size();
+    }
 };
 
 #endif
